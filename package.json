@@ -1,0 +1,9 @@
+{
+  "name": "prototype-long-running-tasks",
+  "version": "0.0.1",
+  "description": "A prototype to test long running tasks.",
+  "main": "index.js",
+  "repository": "https://github.com/sammler/prototype-long-running-tasks",
+  "author": "Stefan Walther",
+  "license": "MIT"
+}
