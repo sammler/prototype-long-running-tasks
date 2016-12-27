@@ -1,0 +1,21 @@
+{
+  "name": "strategy-x",
+  "version": "0.1.0",
+  "description": "Simple sammler strategy to test the entire flow.",
+  "license": "MIT",
+  "author": "Stefan Walther",
+  "main": "index.js",
+  "scripts": {
+    "lint": "yarn run lint:src",
+    "lint:src": "eslint ./",
+    "lint:src:fix": "eslint --fix",
+    "start": "node ./index.js"
+  },
+  "dependencies": {
+    "amqplib": "^0.5.1"
+  },
+  "devDependencies": {
+    "eslint": "^3.12.2",
+    "eslint-config-xo-space": "^0.15.0"
+  }
+}
