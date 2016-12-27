@@ -11,8 +11,8 @@
   },
   "scripts": {
     "lint": "yarn run lint:src && yarn run lint:test",
-    "lint:src": "eslint src",
-    "lint:src:fix": "eslint src --fix",
+    "lint:src": "eslint ./",
+    "lint:src:fix": "eslint --fix",
     "start": "node ./index.js"
   },
   "devDependencies": {
