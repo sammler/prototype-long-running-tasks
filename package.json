@@ -1,9 +1,12 @@
 {
-  "name": "prototype-long-running-tasks",
+  "name": "sammler-flow-prototype",
   "version": "0.0.1",
-  "description": "A prototype to test long running tasks.",
-  "main": "index.js",
-  "repository": "https://github.com/sammler/prototype-long-running-tasks",
+  "description": "A prototype to continuously validate the entire flow.",
+  "repository": "https://github.com/sammler/sammler-flow-prototype",
   "author": "Stefan Walther",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "dc-dev-up": "docker-compose --f=./dc-dev.yml up --build",
+    "dc-dev-down": "docker-compose --f=./dc-dev.yml down"
+  }
 }

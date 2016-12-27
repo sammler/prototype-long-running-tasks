@@ -27,7 +27,10 @@ schedule.scheduleJob('* * * * *', () => {
         return Promise.all([
           channel.assertQueue(queue),
           channel.sendToQueue(queue, encode('strategy-x'), msgOptions)
-        ]);
+        ])
+          .then(() => {
+            console.log('Send message to MQ: strategy-x');
+          });
       });
   })
     .catch(err => {
