@@ -2,11 +2,15 @@
   "name": "sammler-flow-prototype",
   "version": "0.0.1",
   "description": "A prototype to continuously validate the entire flow.",
-  "repository": "https://github.com/sammler/sammler-flow-prototype",
-  "author": "Stefan Walther",
   "license": "MIT",
+  "author": "Stefan Walther",
+  "repository": "https://github.com/sammler/sammler-flow-prototype",
   "scripts": {
-    "dc-dev-up": "docker-compose --f=./dc-dev.yml up --build",
-    "dc-dev-down": "docker-compose --f=./dc-dev.yml down"
+    "dc-dev-down": "docker-compose --f=./dc-dev.yml down",
+    "dc-dev-up": "docker-compose --f=./dc-dev.yml up --build"
+  },
+  "dependencies": {
+    "sammler-jobs-service": "sammler/sammler-jobs-service",
+    "sammler-log-service": "sammler/sammler-log-service"
   }
 }

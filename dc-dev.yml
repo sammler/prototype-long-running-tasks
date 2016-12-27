@@ -41,6 +41,38 @@ services:
       - WAIT_SLEEP=2
       - WAIT_LOOPS=20
       - SAMMLER_RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
+      - SAMMLER_JOBS_SERVICE_URI=http://jobs-service:3003
+    links:
+      - db
+      - rabbitmq
+      - jobs-service
+      - log-service
+
+  jobs-service:
+    build:
+      context: ./node_modules/sammler-jobs-service
+#    command: sh wait_to_start.sh
+    environment:
+#      - WAIT_COMMAND=[ $$(curl --write-out %{http_code} --silent --output /dev/null http://db:27017) = 200 ]
+#      - WAIT_START_CMD=yarn run start
+#      - WAIT_SLEEP=2
+#      - WAIT_LOOPS=20
+      - PORT=3003
+      - SAMMLER_DB_URI_JOBS=mongodb://db:27017/jobs
+    links:
+      - db
+
+  log-service:
+    build:
+      context: ./node_modules/sammler-log-service
+#    command: sh wait_to_start.sh
+    environment:
+#      - WAIT_COMMAND=[ $$(curl --write-out %{http_code} --silent --output /dev/null http://db:27017) = 200 ]
+#      - WAIT_START_CMD=yarn run start
+#      - WAIT_SLEEP=2
+#      - WAIT_LOOPS=20
+      - PORT=3004
+      - SAMMLER_DB_URI_LOGS=mongodb://db:27017/logs
     links:
       - db
       - rabbitmq
