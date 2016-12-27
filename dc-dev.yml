@@ -6,10 +6,10 @@ networks:
 
 services:
 
-#  db:
-#    image: mongo
-#    ports:
-#      - "27017:27017"
+  db:
+    image: mongo
+    ports:
+      - "27017:27017"
 
   rabbitmq:
     image: rabbitmq:3.6.6-management
@@ -28,6 +28,7 @@ services:
       - WAIT_LOOPS=20
       - SAMMLER_RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
     links:
+      - db
       - rabbitmq
 
   strategy-x:
@@ -41,5 +42,5 @@ services:
       - WAIT_LOOPS=20
       - SAMMLER_RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
     links:
+      - db
       - rabbitmq
-#      - db
