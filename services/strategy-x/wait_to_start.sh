@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Thx to BrunoRocha!!!
+# borrowed from: http://brunorocha.org/python/dealing-with-linked-containers-dependency-in-docker-compose.html
+
+
 echo $WAIT_COMMAND
 echo $WAIT_START_CMD
 
