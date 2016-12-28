@@ -9,10 +9,13 @@ RUN mkdir -p $HOME
 
 WORKDIR $HOME
 
-COPY package.json yarn.lock index.js / ./
+COPY package.json yarn.lock ./
 
-RUN yarn install
-RUN npm install -g nodemon #yarn global add does not work, for whatever reasons
+RUN yarn install \
+  #yarn global add does not work, for whatever reasons
+  && npm install -g nodemon
+
+COPY / ./
 
 EXPOSE $PORT
 

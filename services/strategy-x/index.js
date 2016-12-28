@@ -10,14 +10,13 @@ open.then(conn => conn.createChannel())
         // Log the msg to stdout
         _logMsg(msg);
 
-
         // Do the long running job
 
         // Log the result
 
         // Mark completed in jobs-service
 
-        ack(channel, msg);
+        return ack(channel, msg);
       }
     })))
   .catch(console.warn);
@@ -25,10 +24,13 @@ open.then(conn => conn.createChannel())
 function _logMsg(msg) {
   console.log('message: ', msg);
   console.log('Got message from MQ: ', JSON.parse(msg.content));
+  console.log('xx');
 }
 
 function longRunning() {
-  return Promise.resolve();
+  return new Promise(resolve => {
+    return resolve();
+  });
 }
 
 function logResult() {
@@ -36,7 +38,7 @@ function logResult() {
 }
 
 function ack(channel, msg) {
-  return new Promsise( (resolve) => {
+  return new Promise( (resolve) => {
     channel.ack(msg);
     resolve();
   })

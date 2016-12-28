@@ -6,8 +6,8 @@ const uuidV4 = require('uuid/v4');
 const rule = new schedule.RecurrenceRule();
 rule.minute = 1;
 
-function encode(doc) {
-  return new Buffer(JSON.stringify(doc));
+function encode(obj) {
+  return new Buffer(JSON.stringify(obj));
 }
 
 /**

@@ -27,6 +27,8 @@ services:
       - WAIT_SLEEP=2
       - WAIT_LOOPS=20
       - SAMMLER_RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
+    volumes:
+      - "./services/scheduler:/home"
     links:
       - db
       - rabbitmq
@@ -43,7 +45,7 @@ services:
       - SAMMLER_RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
       - SAMMLER_JOBS_SERVICE_URI=http://jobs-service:3003
     volumes:
-      - ./:/home
+      - "./services/strategy-x:/home"
     links:
       - db
       - rabbitmq
