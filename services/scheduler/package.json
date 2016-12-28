@@ -14,7 +14,8 @@
     "lint": "yarn run lint:src && yarn run lint:test",
     "lint:src": "eslint ./",
     "lint:src:fix": "eslint --fix",
-    "start": "node ./index.js"
+    "start": "node ./index.js",
+    "start:dev": "nodemon --watch . --exec yarn run start"
   },
   "devDependencies": {
     "eslint": "^3.12.2",

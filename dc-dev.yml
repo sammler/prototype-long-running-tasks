@@ -23,7 +23,7 @@ services:
     command: sh wait_to_start.sh
     environment:
       - WAIT_COMMAND=[ $$(curl --write-out %{http_code} --silent --output /dev/null http://rabbitmq:15672) = 200 ]
-      - WAIT_START_CMD=yarn run start
+      - WAIT_START_CMD=yarn run start:dev
       - WAIT_SLEEP=2
       - WAIT_LOOPS=20
       - SAMMLER_RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
