@@ -6,11 +6,11 @@
   "author": "Stefan Walther",
   "main": "index.js",
   "scripts": {
-    "lint": "yarn run lint:src",
+    "lint": "npm run lint:src",
     "lint:src": "eslint ./",
     "lint:src:fix": "eslint --fix",
     "start": "node ./index.js",
-    "start:dev": "nodemon --watch . --exec yarn run start"
+    "start:dev": "nodemon --watch . --exec npm run start"
   },
   "dependencies": {
     "amqplib": "^0.5.1"
