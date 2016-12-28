@@ -4,11 +4,12 @@ const open = amqp.connect(process.env.SAMMLER_RABBITMQ_URL);
 const queue = 'queue';
 
 open.then(conn => conn.createChannel())
-  .then(ch => ch.assertQueue(queue)
-    .then(() => ch.consume(queue, msg => {
+  .then(channel => channel.assertQueue(queue)
+    .then(() => channel.consume(queue, msg => {
       if (msg !== null) {
-        console.log('message: ', msg);
-        console.log('Got message from MQ: ', JSON.parse(msg.content));
+        // Log the msg to stdout
+        _logMsg(msg);
+
 
         // Do the long running job
 
@@ -16,7 +17,27 @@ open.then(conn => conn.createChannel())
 
         // Mark completed in jobs-service
 
-        ch.ack(msg);
+        ack(channel, msg);
       }
     })))
   .catch(console.warn);
+
+function _logMsg(msg) {
+  console.log('message: ', msg);
+  console.log('Got message from MQ: ', JSON.parse(msg.content));
+}
+
+function longRunning() {
+  return Promise.resolve();
+}
+
+function logResult() {
+  return Promise.resolve();
+}
+
+function ack(channel, msg) {
+  return new Promsise( (resolve) => {
+    channel.ack(msg);
+    resolve();
+  })
+}

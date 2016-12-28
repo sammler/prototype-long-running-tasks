@@ -12,6 +12,7 @@ WORKDIR $HOME
 COPY package.json yarn.lock index.js / ./
 
 RUN yarn install
+RUN npm install -g nodemon #yarn global add does not work, for whatever reasons
 
 EXPOSE $PORT
 

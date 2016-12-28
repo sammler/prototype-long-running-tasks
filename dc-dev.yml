@@ -37,11 +37,13 @@ services:
     command: sh wait_to_start.sh
     environment:
       - WAIT_COMMAND=[ $$(curl --write-out %{http_code} --silent --output /dev/null http://rabbitmq:15672) = 200 ]
-      - WAIT_START_CMD=yarn run start
       - WAIT_SLEEP=2
       - WAIT_LOOPS=20
+      - WAIT_START_CMD=yarn run start:dev
       - SAMMLER_RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
       - SAMMLER_JOBS_SERVICE_URI=http://jobs-service:3003
+    volumes:
+      - ./:/home
     links:
       - db
       - rabbitmq
