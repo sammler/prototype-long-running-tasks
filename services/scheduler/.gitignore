@@ -1,3 +1,7 @@
+# project
+.cache
+.config
+
 # always ignore files
 *.DS_Store
 *.sublime-*
