@@ -1,12 +1,24 @@
-The purpose of this project is to validate the entire flow of sammler with a very minimalistic setup.
+The purpose of this project is to validate the entire flow of _sammler_ with a very minimalistic setup. At the same time this setup should be representative to what will happen with multiple _sammler_ strategies.
 
 ### Basic services:
 
+- scheduler
+- db
+- rabbitmq
+- strategy-x
+- jobs-service
+- log-service
+
 ### Basic flow
 
-- s5r-scheduler posts a new message (`strategy-x` to RabbitMQ every minute
-- s5r-strategy-x listens to RabbitMQ and
-  - adds the job to s5r-job-service
-  - runs the job (takes 2 mins)
-  - marks the job as completed in the s5r-job-service
-  - acknowledges the job on RabbitMQ
+- _scheduler_ 
+  - creates a new unique message (every minute / 10x a minute),
+  - posts the new message (`strategy-x`) to RabbitMQ
+- _strategy-x_ listens to RabbitMQ
+
+---
+Tasks:
+- add the job to jobs-service
+- run the job (takes 2 mins)
+- mark the job as completed in the jobs-service
+- acknowledge the job on RabbitMQ
