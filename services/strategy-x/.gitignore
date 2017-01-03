@@ -1,6 +1,7 @@
 # project
 .cache
 .config
+.yarn
 
 # always ignore files
 *.DS_Store
