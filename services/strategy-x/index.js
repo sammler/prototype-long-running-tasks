@@ -16,6 +16,9 @@ function listenExchange() {
   }
 
   const ex = 'topic_logs';
+  const exchangeType = 'topic';
+  const queueAll = 'q-all';
+  const queueCritical = 'testQ1';
 
   // Todo: This can definitely be simplified ...
   amqp.connect(uri)
@@ -23,28 +26,24 @@ function listenExchange() {
       return conn.createChannel();
     })
     .then(channel => {
-      return channel.assertQueue('', {exclusive: false})
-        .then(queue => {
-          return Promise.resolve({
-            channel,
-            queue
-          });
-        });
-    })
-    .then(result => {
-      const key = 'kern.*';
       return Promise.all([
-        result.channel.assertExchange(ex, 'topic', {durable: false}),
-        result.channel.bindQueue(result.queue.queue, ex, 'kern.*'),
-        result.channel.bindQueue(result.queue.queue, ex, '*.critical'),
-        result.channel.bindQueue(result.queue.queue, ex, '#'),
-        result.channel.consume(result.queue.queue, msg => {
+        channel.assertExchange(ex, exchangeType, {durable: false}),
+        channel.assertQueue(queueAll, {exclusive: false}),
+        channel.bindQueue(queueAll, ex, '#'),
+        channel.consume(queueAll, msg => {
           // eslint-disable-next-line quotes
-          console.log(" [x] %s:'%s'", msg.fields.routingKey, msg.content.toString());
+          console.log(" [x] %s - %s:'%s'", '#', msg.fields.routingKey, msg.content.toString());
+        }, {noAck: true}),
+        channel.assertQueue(queueCritical, {exclusive: false}),
+        channel.bindQueue(queueCritical, ex, '*.critical'),
+        // result.channel.bindQueue(result.queue.queue, ex, '#'),
+        channel.consume(queueCritical, msg => {
+          // eslint-disable-next-line quotes
+          console.log(" [x] %s - %s:'%s'", '*.critical', msg.fields.routingKey, msg.content.toString());
         }, {noAck: true})
       ]);
     })
-    .catch( err => {
+    .catch(err => {
       console.log('An error occurred:', err);
     });
 }
