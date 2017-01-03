@@ -33,6 +33,7 @@ function listenExchange() {
         channel.consume(queueAll, msg => {
           // eslint-disable-next-line quotes
           console.log(" [x] %s - %s:'%s'", '#', msg.fields.routingKey, msg.content.toString());
+          msg.ack(channel, msg);
         }, {noAck: true}),
         channel.assertQueue(queueCritical, {exclusive: false}),
         channel.bindQueue(queueCritical, ex, '*.critical'),
@@ -40,6 +41,7 @@ function listenExchange() {
         channel.consume(queueCritical, msg => {
           // eslint-disable-next-line quotes
           console.log(" [x] %s - %s:'%s'", '*.critical', msg.fields.routingKey, msg.content.toString());
+          msg.ack(channel, msg);
         }, {noAck: true})
       ]);
     })
