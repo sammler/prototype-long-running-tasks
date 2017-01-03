@@ -18,23 +18,24 @@ function listenExchange() {
     .then(conn => {
       return conn.createChannel();
     })
-    .then(ch => {
-      return ch.assertQueue('', {exclusive: true})
-        .then(q => {
+    .then(channel => {
+      return channel.assertQueue('', {exclusive: true})
+        .then(queue => {
           return Promise.resolve({
-            ch,
-            q
+            channel,
+            queue
           });
         });
     })
     .then(result => {
       const key = 'kern.*';
       return Promise.all([
-        result.ch.assertExchange(ex, 'topic', {durable: false}),
-        result.ch.bindQueue(result.q.queue, ex, key),
-        result.ch.consume(result.q.queue, handleMessages)
+        result.channel.assertExchange(ex, 'topic', {durable: false}),
+        result.channel.bindQueue(result.queue.queue, ex, key),
+        result.channel.consume(result.queue.queue, handleMessages)
       ]);
-    });
+    })
+  ;
 }
 
 function listenExchangeCb() {
