@@ -5,21 +5,25 @@ const uri = process.env.SAMMLER_RABBITMQ_URL;
 
 // listenQueue();
 listenExchange();
-listenExchangeCb();
+// listenExchangeCb();
 
 function listenExchange() {
 
-  function handleMessages(msg) {
+  function handleMessages(msg, b, c) {
     console.log('handle messages\n', msg);
+
+    return Promise.reject();
   }
 
   const ex = 'topic_logs';
+
+  // Todo: This can definitely be simplified ...
   amqp.connect(uri)
     .then(conn => {
       return conn.createChannel();
     })
     .then(channel => {
-      return channel.assertQueue('', {exclusive: true})
+      return channel.assertQueue('', {exclusive: false})
         .then(queue => {
           return Promise.resolve({
             channel,
@@ -31,11 +35,15 @@ function listenExchange() {
       const key = 'kern.*';
       return Promise.all([
         result.channel.assertExchange(ex, 'topic', {durable: false}),
-        result.channel.bindQueue(result.queue.queue, ex, key),
+        result.channel.bindQueue(result.queue.queue, ex, 'kern.*'),
+        result.channel.bindQueue(result.queue.queue, ex, '*.critical'),
+        result.channel.bindQueue(result.queue.queue, ex, '#'),
         result.channel.consume(result.queue.queue, handleMessages)
       ]);
     })
-  ;
+    .catch( err => {
+      console.log('An error occurred:', err);
+    });
 }
 
 function listenExchangeCb() {
