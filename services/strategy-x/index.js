@@ -27,7 +27,7 @@ function listenExchange() {
     })
     .then(channel => {
       return Promise.all([
-        channel.assertExchange(ex, exchangeType, {durable: false}),
+        channel.assertExchange(ex, exchangeType, {durable: true}),
         channel.assertQueue(queueAll, {exclusive: false}),
         channel.bindQueue(queueAll, ex, '#'),
         channel.consume(queueAll, msg => {

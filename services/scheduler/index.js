@@ -52,10 +52,12 @@ setInterval(() => {
             foo: 'bar',
             bar: 'baz'
           };
-          ch.assertExchange(ex, 'topic', {durable: false});
+          ch.assertExchange(ex, 'topic', {durable: true});
           ch.publish(ex, key, encode(msg));
           console.log(" [x] Sent %s:'%s'", key, JSON.stringify(msg, null)); // eslint-disable-line quotes
-          setTimeout(() => {conn.close();}, 500);
+          setTimeout(() => {
+            conn.close();
+          }, 500);
         });
     });
 }, 1000 * 10);
