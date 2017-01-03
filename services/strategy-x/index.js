@@ -33,16 +33,16 @@ function listenExchange() {
         channel.consume(queueAll, msg => {
           // eslint-disable-next-line quotes
           console.log(" [x] %s - %s:'%s'", '#', msg.fields.routingKey, msg.content.toString());
-          msg.ack(channel, msg);
-        }, {noAck: true}),
+          channel.ack(msg);
+        }, {noAck: false}),
         channel.assertQueue(queueCritical, {exclusive: false}),
         channel.bindQueue(queueCritical, ex, '*.critical'),
         // result.channel.bindQueue(result.queue.queue, ex, '#'),
         channel.consume(queueCritical, msg => {
           // eslint-disable-next-line quotes
           console.log(" [x] %s - %s:'%s'", '*.critical', msg.fields.routingKey, msg.content.toString());
-          msg.ack(channel, msg);
-        }, {noAck: true})
+          channel.ack(msg);
+        }, {noAck: false})
       ]);
     })
     .catch(err => {
