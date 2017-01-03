@@ -37,3 +37,25 @@ schedule.scheduleJob('* * * * *', () => {
       console.log('error connecting to RabbitMG', err);
     });
 });
+
+// Even simpler, post a message every 30 sec. to RabbitMQ
+// - Exchange "github"
+//
+setInterval(() => {
+  amqp.connect(RABBIT_URI)
+    .then(conn => {
+      conn.createChannel()
+        .then(ch => {
+          const ex = 'topic_logs';
+          const key = 'kern.critical';
+          const msg = {
+            foo: 'bar',
+            bar: 'baz'
+          };
+          ch.assertExchange(ex, 'topic', {durable: false});
+          ch.publish(ex, key, encode(msg));
+          console.log(" [x] Sent %s:'%s'", key, JSON.stringify(msg, null)); // eslint-disable-line quotes
+          setTimeout(() => {conn.close();}, 500);
+        });
+    });
+}, 1000 * 10);

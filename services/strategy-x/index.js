@@ -1,35 +1,104 @@
 const amqp = require('amqplib');
+const amqpCb = require('amqplib/callback_api');
 
-const open = amqp.connect(process.env.SAMMLER_RABBITMQ_URL);
-const queue = 'queue';
+const uri = process.env.SAMMLER_RABBITMQ_URL;
 
-open.then(conn => conn.createChannel())
-  .then(channel => channel.assertQueue(queue)
-    .then(() => channel.consume(queue, msg => {
-      if (msg !== null) {
+// listenQueue();
+listenExchange();
+listenExchangeCb();
 
-        // Do the long running job
-        // Log the msg to stdout
-        _logMsg(msg)
-          .then(() => { longRunning.bind(null, msg);}) // eslint-disable-line brace-style
+function listenExchange() {
 
-          // Log the result of the long-running task
-          .then(logResult) // eslint-disable-line brace-style
+  function handleMessages(msg) {
+    console.log('handle messages\n', msg);
+  }
 
-          // Mark completed in jobs-service
+  const ex = 'topic_logs';
+  amqp.connect(uri)
+    .then(conn => {
+      return conn.createChannel();
+    })
+    .then(ch => {
+      return ch.assertQueue('', {exclusive: true})
+        .then(q => {
+          return Promise.resolve({
+            ch,
+            q
+          });
+        });
+    })
+    .then(result => {
+      const key = 'kern.*';
+      return Promise.all([
+        result.ch.assertExchange(ex, 'topic', {durable: false}),
+        result.ch.bindQueue(result.q.queue, ex, key),
+        result.ch.consume(result.q.queue, handleMessages)
+      ]);
+    });
+}
 
-          // acknowledge on RabbitMQ
-          .then(() => { ack(channel, msg); });  // eslint-disable-line brace-style
-      }
-    })))
-  .catch(console.warn);
+function listenExchangeCb() {
+  amqpCb.connect(uri, (err, conn) => {
+    if (err) {
+      console.log('err connect', err);
+    }
+    conn.createChannel((err, ch) => {
+      const ex = 'topic_logs';
+
+      ch.assertExchange(ex, 'topic', {durable: false});
+
+      ch.assertQueue('', {exclusive: true}, (err, q) => {
+        console.log(' [*] Waiting for logs. To exit press CTRL+C');
+
+        const key = '#';
+        ch.bindQueue(q.queue, ex, key);
+
+        ch.consume(q.queue, msg => {
+          // console.log('x', msg);
+          console.log(" [x] %s:'%s'", msg.fields.routingKey, msg.content.toString()); // eslint-disable-line quotes
+        }, {noAck: true});
+      });
+    });
+  });
+}
+
+function listenQueue() {
+
+  const queue = 'queue';
+  amqp.connect(uri)
+    .then(conn => {
+      conn.createChannel()
+        .then(channel => channel.assertQueue(queue)
+          .then(() => channel.consume(queue, msg => {
+            if (msg !== null) {
+              // Do the long running job
+              // Log the msg to stdout
+              _logMsg(msg)
+                .then(() => {
+                  longRunning.bind(null, msg);
+                }) // eslint-disable-line brace-style
+
+                // Log the result of the long-running task
+                .then(logResult) // eslint-disable-line brace-style
+
+                // Mark completed in jobs-service
+
+                // acknowledge on RabbitMQ
+                .then(() => {
+                  ack(channel, msg);
+                });  // eslint-disable-line brace-style
+            }
+          })))
+        .catch(console.warn);
+    });
+}
 
 function _logMsg(msg) {
   console.log('xx LOG MESSAGE --');
   console.log('Got message from MQ: ', JSON.parse(msg.content));
   console.log('==> message-id: ', msg.properties.correlationId);
   console.log('==> message details:\r\n', msg);
-  return new Promise( resolve => {
+  return new Promise(resolve => {
     setTimeout(() => {
       console.log('xx LOG MESSAGE xx');
       return resolve();
