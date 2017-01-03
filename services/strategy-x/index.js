@@ -9,7 +9,7 @@ listenExchange();
 
 function listenExchange() {
 
-  function handleMessages(msg, b, c) {
+  function handleMessages(msg) {
     console.log('handle messages\n', msg);
 
     return Promise.reject();
@@ -38,7 +38,10 @@ function listenExchange() {
         result.channel.bindQueue(result.queue.queue, ex, 'kern.*'),
         result.channel.bindQueue(result.queue.queue, ex, '*.critical'),
         result.channel.bindQueue(result.queue.queue, ex, '#'),
-        result.channel.consume(result.queue.queue, handleMessages)
+        result.channel.consume(result.queue.queue, msg => {
+          // eslint-disable-next-line quotes
+          console.log(" [x] %s:'%s'", msg.fields.routingKey, msg.content.toString());
+        }, {noAck: true})
       ]);
     })
     .catch( err => {
