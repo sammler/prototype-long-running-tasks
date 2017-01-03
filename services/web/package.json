@@ -1,0 +1,21 @@
+{
+  "name": "web",
+  "version": "0.1.0",
+  "description": "Simple web interface to see what's going on.",
+  "license": "MIT",
+  "author": "Stefan Walther",
+  "main": "index.js",
+  "scripts": {
+    "lint": "yarn run lint:src && yarn run lint:test",
+    "lint:src": "eslint ./",
+    "lint:src:fix": "eslint --fix",
+    "start": "node ./index.js"
+  },
+  "dependencies": {
+    "superagent": "^3.3.1"
+  },
+  "devDependencies": {
+    "eslint": "^3.12.2",
+    "eslint-config-xo-space": "^0.15.0"
+  }
+}
