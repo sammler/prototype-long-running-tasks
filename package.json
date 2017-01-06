@@ -1,6 +1,6 @@
 {
   "name": "sammler-flow-prototype",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A prototype to continuously validate the entire flow.",
   "license": "MIT",
   "author": "Stefan Walther",
