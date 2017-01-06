@@ -62,7 +62,7 @@ services:
 #      - WAIT_SLEEP=2
 #      - WAIT_LOOPS=20
       - PORT=3003
-      - SAMMLER_DB_URI_JOBS=mongodb://db:27017/jobs
+      - SAMMLER_DB_JOBS_URI=mongodb://db:27017/jobs
     links:
       - db
 
