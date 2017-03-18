@@ -1,5 +1,7 @@
 # sammler-flow-prototype
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/sammler/sammler-flow-prototype.svg)](https://greenkeeper.io/)
+
 > A prototype to continuously validate the entire flow.
 
 ## Purpose
