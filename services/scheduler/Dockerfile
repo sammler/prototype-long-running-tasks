@@ -1,4 +1,4 @@
-FROM kkarczmarczyk/node-yarn:7.2-slim
+FROM kkarczmarczyk/node-yarn:7.6-slim
 MAINTAINER Stefan Walther
 
 ARG PORT=3004
