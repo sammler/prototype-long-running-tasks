@@ -12,7 +12,7 @@
     "start": "node ./index.js"
   },
   "dependencies": {
-    "superagent": "^3.3.1"
+    "superagent": "^4.0.0"
   },
   "devDependencies": {
     "eslint": "3.12.2",
