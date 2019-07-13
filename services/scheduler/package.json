@@ -18,7 +18,7 @@
     "start:dev": "nodemon --watch . --exec yarn run start"
   },
   "devDependencies": {
-    "eslint": "3.12.2",
+    "eslint": "4.18.2",
     "eslint-config-xo-space": "0.15.0"
   }
 }
